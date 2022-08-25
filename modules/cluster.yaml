@@ -1,0 +1,22 @@
+version: 3
+
+tasks:
+  create:
+    cmds:
+    - k3d cluster create {{ .CLUSTER_NAME }} --config k3d-config.yaml
+    - kubectl rollout status -n kube-system deployment/coredns --timeout 1m
+    - kubectl rollout status -n kube-system deployment/metrics-server --timeout 1m
+    status:
+    - k3d cluster list | grep {{ .CLUSTER_NAME }}
+ 
+  start:
+    cmds:
+    - k3d cluster start {{ .CLUSTER_NAME }}
+  
+  stop:
+    cmds:
+    - k3d cluster stop {{ .CLUSTER_NAME }}
+
+  delete:
+    cmds:
+    - k3d cluster delete {{ .CLUSTER_NAME }}

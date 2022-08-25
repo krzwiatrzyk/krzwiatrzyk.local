@@ -1,0 +1,42 @@
+version: '3'
+
+vars:
+  CLUSTER_NAME: 
+    sh: basename "$PWD"
+
+includes:
+  cluster:
+    taskfile: modules/cluster.yaml
+    vars:
+      CLUSTER_NAME: '{{ .CLUSTER_NAME }}'
+  argocd: modules/argocd.yaml
+
+tasks:
+  default:
+    vars:
+      ALL_MODULES:
+        sh: task --list-all | tail --lines +2 | cut -f 1 -d ":" | cut -c 2- | uniq | xargs
+      MODULE:
+        sh: gum choose {{ .ALL_MODULES }}
+      MODULE_COMMANDS:
+        sh: task --list-all | tail --lines +2 | grep {{ .MODULE }} | cut -f 2 -d ":" | xargs
+      COMMAND:
+        sh: gum choose {{ .MODULE_COMMANDS }}    
+    cmds:
+    - task {{ .MODULE }}:{{ .COMMAND }}
+
+  kubernetes-dashboard:install:
+    cmds:
+    - kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+
+  ingress-nginx:install:
+    cmds:
+    - helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+    - |
+      helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
+      -n ingress-nginx --create-namespace -f ingress-nginx.yaml
+
+  traefik:uninstall:
+    cmds:
+    - helm uninstall traefik -n kube-system
+

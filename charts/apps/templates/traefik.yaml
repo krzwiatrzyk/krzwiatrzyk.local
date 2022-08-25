@@ -1,0 +1,30 @@
+{{ if .Values.traefik }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/foreground
+spec:
+  project: default
+  source:
+    repoURL: https://helm.traefik.io/traefik
+    targetRevision: '10.x.x'
+    chart: traefik
+    helm:
+      values: {{ .Files.Get "values/traefik.yaml" | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: traefik
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - PrunePropagationPolicy=foreground
+      - Replace=false
+      - PruneLast=false
+      - Validate=true
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=false
+{{ end }}

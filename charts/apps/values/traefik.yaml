@@ -1,0 +1,17 @@
+ports:
+  websecure:
+    tls:
+      enabled: true
+  postgresql:
+    port: 5432
+    expose: true
+    exposedPort: 5432
+    protocol: TCP
+
+providers:
+  kubernetesIngress:
+    publishedService:
+      enabled: true
+  kubernetesCRD:
+    allowCrossNamespace: true
+    allowExternalNameServices: true

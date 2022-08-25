@@ -1,0 +1,14 @@
+version: 3
+
+tasks:
+  install:
+    cmds:
+    - > 
+      helm upgrade --install argo-cd argo/argo-cd
+      -f https://raw.githubusercontent.com/krzwiatrzyk/lib-cluster-manager/main/k8s-gitops/argocd/values/minimal.yaml
+      -n argo-cd
+      --create-namespace
+    
+  app-of-apps:
+    cmds:
+    - kubectl apply -f manifests/app-of-apps.yaml

@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-of-apps
+  namespace: argo-cd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/krzwiatrzyk/krzwiatrzyk.minimal.git
+    targetRevision: HEAD
+    path: charts/apps
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo-cd
