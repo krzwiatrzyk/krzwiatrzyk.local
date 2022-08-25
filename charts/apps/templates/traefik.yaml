@@ -12,7 +12,8 @@ spec:
     targetRevision: '10.x.x'
     chart: traefik
     helm:
-      values: {{ .Files.Get "values/traefik.yaml" | nindent 8 }}
+      values: | 
+        {{ .Files.Get "values/traefik.yaml" | nindent 8 }}
   destination:
     server: https://kubernetes.default.svc
     namespace: traefik
