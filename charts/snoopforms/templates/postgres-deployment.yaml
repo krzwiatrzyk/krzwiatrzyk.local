@@ -30,6 +30,8 @@ spec:
               value: postgres
           image: postgres:13-alpine
           name: postgres
+          ports:
+            - containerPort: 5432
           resources: {}
           volumeMounts:
             - mountPath: /var/lib/postgresql/data

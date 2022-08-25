@@ -28,7 +28,20 @@ spec:
             - sh
             - -c
             - yarn prisma migrate deploy && yarn start
-          image: snoopforms
+          env:
+            - name: DATABASE_URL
+              value: postgresql://postgres:postgres@postgres:5432/snoopforms?schema=public
+            - name: EMAIL_VERIFICATION_DISABLED
+              value: "1"
+            - name: NEXTAUTH_SECRET
+              value: RANDOM_STRING
+            - name: NEXTAUTH_URL
+              value: http://localhost:3000
+            - name: NEXT_TELEMETRY_DISABLED
+              value: "1"
+            - name: PASSWORD_RESET_DISABLED
+              value: "1"
+          image: ghcr.io/snoopforms/snoopforms:latest
           name: snoopforms
           ports:
             - containerPort: 3000

@@ -4,11 +4,13 @@ services:
     image: postgres:13-alpine
     volumes:
       - postgres:/var/lib/postgresql/data
+    ports:
+    - 5432:5432
     environment:
       - POSTGRES_PASSWORD=postgres
 
   snoopforms:
-    image: TODO
+    image: ghcr.io/snoopforms/snoopforms:latest
     command: [sh, -c, "yarn prisma migrate deploy && yarn start"]
     depends_on:
       - postgres
@@ -19,7 +21,7 @@ services:
 
       NEXTAUTH_URL: http://localhost:3000
 
-      DATABASE_URL: 'postgresql://user@localhost:5432/snoopforms?schema=public'
+      DATABASE_URL: 'postgresql://postgres:postgres@postgres:5432/snoopforms?schema=public'
       # For Docker Compose Setup use this Database URL:
       # DATABASE_URL='postgresql://postgres:postgres@postgres:5432/snoopforms?schema=public'
 
