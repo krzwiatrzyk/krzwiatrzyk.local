@@ -5,6 +5,9 @@ metadata:
   name: traefik
   finalizers:
     - resources-finalizer.argocd.argoproj.io/foreground
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "1" # default 0, lower priority is installed first
 spec:
   project: default
   source:

@@ -1,0 +1,23 @@
+version: 3
+
+tasks:
+  download:docker-compose:
+  - wget -nc https://raw.githubusercontent.com/snoopForms/snoopforms/main/docker-compose.yml
+
+  install:kompose:
+    cmds:
+    - wget https://github.com/kubernetes/kompose/releases/download/v1.26.1/kompose_1.26.1_amd64.deb # Replace 1.26.1 with latest tag
+    - sudo apt install ./kompose_1.26.1_amd64.deb
+    - rm kompose_1.26.1_amd64.deb
+    status:
+    - command -v kompose
+
+  kompose:
+  - kompose convert -c -o snoopforms --volumes emptyDir
+  - rm -rf ../../charts/snoopforms
+  - mv snoopforms ../../charts
+
+  install:chart:
+    dir: ../../charts/snoopforms
+    cmds:
+      - helm upgrade --install snoopforms . -n snoopforms --create-namespace

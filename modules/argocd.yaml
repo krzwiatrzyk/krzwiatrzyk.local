@@ -6,6 +6,7 @@ tasks:
     - > 
       helm upgrade --install argo-cd argo/argo-cd
       -f https://raw.githubusercontent.com/krzwiatrzyk/lib-cluster-manager/main/k8s-gitops/argocd/values/minimal.yaml
+      -f charts/apps/values/argocd.yaml
       -n argo-cd
       --create-namespace
     

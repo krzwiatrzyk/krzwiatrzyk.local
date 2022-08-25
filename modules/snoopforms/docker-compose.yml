@@ -1,0 +1,47 @@
+version: "3.3"
+services:
+  postgres:
+    image: postgres:13-alpine
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+  snoopforms:
+    image: TODO
+    command: [sh, -c, "yarn prisma migrate deploy && yarn start"]
+    depends_on:
+      - postgres
+    ports:
+      - 3000:3000
+    environment:
+      NEXTAUTH_SECRET: RANDOM_STRING
+
+      NEXTAUTH_URL: http://localhost:3000
+
+      DATABASE_URL: 'postgresql://user@localhost:5432/snoopforms?schema=public'
+      # For Docker Compose Setup use this Database URL:
+      # DATABASE_URL='postgresql://postgres:postgres@postgres:5432/snoopforms?schema=public'
+
+      # Email Verification. If you enable Email Verification you have to setup SMTP-Settings, too.
+      EMAIL_VERIFICATION_DISABLED: 1
+
+      # Password Reset. If you enable Password Reset functionality you have to setup SMTP-Settings, too.
+      PASSWORD_RESET_DISABLED: 1
+
+      NEXT_TELEMETRY_DISABLED: 1
+
+      # MAIL_FROM=noreply@example.com
+      # SMTP_HOST=smtp.example.com
+      # SMTP_PORT=587
+      # SMTP_USER=smtpUser
+      # SMTP_PASSWORD=smtpPassword
+
+      # TERMS_URL=https://www.example.com/terms
+      # PRIVACY_URL=https://www.example.com/privacy
+      # PUBLIC_IMPRINT_URL=https://www.example.com/imprint
+      # PUBLIC_PRIVACY_URL=https://www.example.com/enduserPrivacy
+
+volumes:
+  postgres:
+    driver: local
