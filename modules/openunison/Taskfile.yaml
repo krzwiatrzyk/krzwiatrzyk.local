@@ -1,0 +1,25 @@
+version: 3
+
+tasks:
+  install:
+    cmds:
+    - ouctl install-auth-portal values/demo.yaml -s secrets/github.yaml
+  
+  install:plugin:
+  - kubectl krew install oulogin
+
+  login: kubectl oulogin --host=openunison.192.168.56.103.nip.io
+
+  create:role:
+  - kubectl create clusterrolebinding krzwiatrzyk-cluster-admin --user krzwiatrzyk --clusterrole cluster-admin
+
+  delete:kubernetes-dashboard-cert:
+  - kubectl delete -n kubernetes-dashboard secret kubernetes-dashboard-certs
+
+  restart:kubernetes-dashboard:
+  - kubectl delete pods -n kubernetes-dashboard --selector app.kubernetes.io/name=kubernetes-dashboard
+
+  install:certs:
+  - kubectl -n openunison get secrets -o yaml ou-tls-certificate | yq -e '.data["tls.crt"]' | base64 -d > /tmp/openunison-ca.crt
+  - sudo cp /tmp/openunison-ca.crt /usr/local/share/ca-certificates/
+  - sudo update-ca-certicate

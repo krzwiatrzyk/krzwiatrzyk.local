@@ -5,38 +5,30 @@ vars:
     sh: basename "$PWD"
 
 includes:
-  cluster:
-    taskfile: modules/cluster.yaml
+  k3d:
+    taskfile: modules/k3d/Taskfile.yaml
+    dir: modules/k3d
     vars:
       CLUSTER_NAME: '{{ .CLUSTER_NAME }}'
+  dex:
+    taskfile: modules/dex/Taskfile.yaml
+    dir: modules/dex
+  ingress-nginx: 
+    taskfile: modules/ingress-nginx/Taskfile.yaml
+    dir: modules/ingress-nginx
+  kubernetes-dashboard:
+    taskfile: modules/kubernetes-dashboard/Taskfile.yaml
+    dir: modules/kubernetes-dashboard
+  openunison:
+    taskfile: modules/openunison/Taskfile.yaml
+    dir: modules/openunison
   argocd: modules/argocd.yaml
+  traefik: modules/traefik.yaml
+  001-scenarios: modules/scenarios.yaml
 
 tasks:
-  default:
-    vars:
-      ALL_MODULES:
-        sh: task --list-all | tail --lines +2 | cut -f 1 -d ":" | cut -c 2- | uniq | xargs
-      MODULE:
-        sh: gum choose {{ .ALL_MODULES }}
-      MODULE_COMMANDS:
-        sh: task --list-all | tail --lines +2 | grep {{ .MODULE }} | cut -f 2 -d ":" | xargs
-      COMMAND:
-        sh: gum choose {{ .MODULE_COMMANDS }}    
-    cmds:
-    - task {{ .MODULE }}:{{ .COMMAND }}
+  default: scripts/selectTask.sh
 
-  kubernetes-dashboard:install:
-    cmds:
-    - kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
 
-  ingress-nginx:install:
-    cmds:
-    - helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-    - |
-      helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
-      -n ingress-nginx --create-namespace -f ingress-nginx.yaml
 
-  traefik:uninstall:
-    cmds:
-    - helm uninstall traefik -n kube-system
 

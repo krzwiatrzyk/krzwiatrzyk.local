@@ -1,0 +1,69 @@
+# https://github.com/mintel/dex-k8s-authenticator/blob/master/examples/config.yaml
+config:
+  port: 80
+  debug: false
+  web_path_prefix: /
+  #logoUrl: http://<path-to-your-logo.png>
+  #kubectl_version: v1.16.2
+  #tlsCert: /path/to/dex-client.crt
+  #tlsKey: /path/to/dex-client.key
+  clusters:
+  - name: kubernetes-local
+    short_description: "Kubernetes Local"
+    description: "Example Cluster Long Description..."
+    client_secret: ZXhhbXBsZS1hcHAtc2VjcmV0
+    issuer: https://dex.192.168.56.103.nip.io
+    k8s_master_uri: https://kubernetes.master.uri
+    client_id: kubernetes-local
+    redirect_uri: https://dex-k8s.127.0.0.1.nip.io/callback/kubernetes-local
+    #k8s_ca_uri: https://url-to-your-ca.crt
+    scopes:
+    - email
+    - profile
+    - openid
+    - groups
+  - name: kubernetes-local-2
+    short_description: "Kubernetes Local"
+    description: "Example Cluster Long Description..."
+    client_secret: ZXhhbXBsZS1hcHAtc2VjcmV0
+    issuer: https://dex.192.168.56.103.nip.io
+    k8s_master_uri: https://kubernetes.master.uri
+    client_id: kubernetes-local
+    redirect_uri: https://dex-k8s.127.0.0.1.nip.io/callback/kubernetes-local-2
+    #k8s_ca_uri: https://url-to-your-ca.crt
+    scopes:
+    - email
+    - profile
+    - openid
+    - groups
+
+
+ingress:
+  enabled: true
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: dex-k8s.127.0.0.1.nip.io
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+volumes:
+  - name: tls
+    secret:
+      secretName: dex.tls
+volumeMounts:
+  - name: tls
+    mountPath: /certs/tls.crt
+    subPath: tls.crt
+

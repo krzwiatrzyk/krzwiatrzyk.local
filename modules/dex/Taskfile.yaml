@@ -1,0 +1,98 @@
+version: 3
+
+tasks:
+  helm:add-repo:
+    cmds:
+    - helm repo add dex https://charts.dexidp.io
+    status:
+    - helm repo list | grep dex
+
+  install:helm:
+    deps:
+    - create:namespace
+    - helm:add-repo
+    - create:secrets:certs
+    - create:secrets:github
+    cmds:
+    - >
+      helm upgrade --install dex dex/dex 
+      -n dex 
+      --create-namespace
+      -f ../../charts/apps/values/dex.yaml
+    - kubectl rollout status -n dex deployment/dex --timeout 1m
+  
+  install:helm:dex-k8s-authenticator:
+    cmds:
+    - helm repo add sagikazarmark https://charts.sagikazarmark.dev || true
+    - helm upgrade --install dex-k8s-authenticator sagikazarmark/dex-k8s-authenticator -n dex -f ../../charts/apps/values/dex-k8s-authenticator.yaml
+
+  install:certs:
+    cmds:
+    - sudo cp ssl/ca.pem /usr/local/share/ca-certificates/ca-test.crt
+    - sudo update-ca-certificates
+
+  install:plugin:
+    cmds:
+    - kubectl krew install oidc-login
+    status:
+    - kubectl plugin list | grep kubectl-oidc_login
+      
+  generate:certs:
+  - ./gencert.sh
+
+  create:namespace:
+    cmds:
+    - kubectl create namespace dex
+    status:
+    - kubectl get ns | grep dex
+
+  create:secrets:certs:
+    status:
+    - kubectl assert exist secret dex.tls -n dex
+    cmds:
+    - kubectl -n dex create secret tls dex.tls --cert=ssl/cert.pem --key=ssl/key.pem
+
+  create:secrets:github:
+    vars:
+      CLIENT_ID:
+        sh: gum input --password --placeholder "Enter client-id"
+      CLIENT_SECRET:
+        sh: gum input --password --placeholder "Enter client-secret"
+    cmds:
+    - >
+      kubectl -n dex create secret generic github-client
+      --from-literal=GITHUB_CLIENT_ID={{ .CLIENT_ID }}
+      --from-literal=GITHUB_CLIENT_SECRET={{ .CLIENT_SECRET }}
+    status:
+    -  kubectl assert exist secret github-client -n dex
+
+  check:
+    cmds:
+    - >
+      kubectl oidc-login setup 
+      --oidc-issuer-url=https://dex.192.168.56.103.nip.io 
+      --oidc-client-id=kubernetes-local 
+      --oidc-client-secret=ZXhhbXBsZS1hcHAtc2VjcmV0 
+      --oidc-extra-scope=groups
+      --oidc-extra-scope=email
+      --oidc-extra-scope=profile
+      --insecure-skip-tls-verify
+    
+  setup:
+  - |
+    kubectl config set-credentials oidc \
+      --exec-api-version=client.authentication.k8s.io/v1beta1 \
+      --exec-command=kubectl \
+      --exec-arg=oidc-login \
+      --exec-arg=get-token \
+      --exec-arg=--oidc-extra-scope=email \
+      --exec-arg=--oidc-issuer-url=https://dex.192.168.56.103.nip.io \
+      --exec-arg=--oidc-client-id=kubernetes-local \
+      --exec-arg=--oidc-client-secret=ZXhhbXBsZS1hcHAtc2VjcmV0 \
+      --exec-arg=--insecure-skip-tls-verify
+
+  token:
+  - kubectl oidc-login get-token --oidc-issuer-url=https://dex.192.168.56.103.nip.io --oidc-client-id=kubernetes-local --oidc-client-secret=ZXhhbXBsZS1hcHAtc2VjcmV0 --insecure-skip-tls-verify | jq '.status.token' | tr -d "\""
+
+  test:
+  - kubectl --user oidc get pods

@@ -1,0 +1,72 @@
+ingress:
+  ## If true, Kubernetes Dashboard Ingress will be created.
+  ##
+  enabled: false
+
+  ## Kubernetes Dashboard Ingress labels
+  # labels:
+  #   key: value
+
+  ## Kubernetes Dashboard Ingress annotations
+  # annotations:
+  #   kubernetes.io/ingress.class: nginx
+  #   kubernetes.io/tls-acme: 'true'
+
+  ## If you plan to use TLS backend with enableInsecureLogin set to false
+  ## (default), you need to uncomment the below.
+  ## If you use ingress-nginx < 0.21.0
+  #   nginx.ingress.kubernetes.io/secure-backends: "true"
+  ## if you use ingress-nginx >= 0.21.0
+  #   nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+
+  ## Kubernetes Dashboard Ingress Class
+  # className: "example-lb"
+
+  ## Kubernetes Dashboard Ingress paths
+  ## Both `/` and `/*` are required to work on gce ingress.
+  paths:
+    - /
+  #  - /*
+
+  ## Custom Kubernetes Dashboard Ingress paths. Will override default paths.
+  ##
+  customPaths: []
+  #  - pathType: ImplementationSpecific
+  #    backend:
+  #      service:
+  #        name: ssl-redirect
+  #        port:
+  #          name: use-annotation
+  #  - pathType: ImplementationSpecific
+  #    backend:
+  #      service:
+  #        name: >-
+  #          {{ include "kubernetes-dashboard.fullname" . }}
+  #        port:
+  #          # Don't use string here, use only integer value!
+  #          number: 443
+  ## Kubernetes Dashboard Ingress hostnames
+  ## Must be provided if Ingress is enabled
+  ##
+  # hosts:
+  #   - kubernetes-dashboard.domain.com
+  ## Kubernetes Dashboard Ingress TLS configuration
+  ## Secrets must be manually created in the namespace
+  ##
+  # tls:
+  #   - secretName: kubernetes-dashboard-tls
+  #     hosts:
+  #       - kubernetes-dashboard.domain.com
+
+## Optional Metrics Server sub-chart
+## Enable this if you don't already have metrics-server enabled on your cluster and
+## want to use it with dashboard metrics-scraper
+## refs:
+##  - https://github.com/kubernetes-sigs/metrics-server
+##  - https://github.com/kubernetes-sigs/metrics-server/tree/master/charts/metrics-server
+metrics-server:
+  enabled: false
+  ## Example for additional args
+  # args:
+  #  - --kubelet-preferred-address-types=InternalIP
+  #  - --kubelet-insecure-tls

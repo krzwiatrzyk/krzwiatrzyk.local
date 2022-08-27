@@ -1,0 +1,36 @@
+version: 3
+
+tasks:
+  install:helm:add-repo:
+    cmds:
+    - helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+    status:
+    - helm repo list | grep kubernetes-dashboard
+
+  install:helm:
+    vars:
+      CONFIG: '{{ .CONFIG | default "default" }}'
+    deps:
+    - install:helm:add-repo
+    cmds:
+    - helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard -n kubernetes-dashboard --create-namespace -f values/{{ .CONFIG }}.yaml
+    status:
+    - helm -n kubernetes-dashboard ls | grep kubernetes-dashboard
+
+  uninstall:helm:
+    cmds:
+    - helm uninstall kubernetes-dashboard -n kubernetes-dashboard
+
+  install:ingress-route-tcp:
+    cmds:
+    - kubectl apply -f manifests/ingress-route-tcp.yaml
+
+  install:ingress-route:
+    cmds:
+    - kubectl apply -f manifests/ingress-route.yaml
+
+  show:values:
+  - firefox https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard?modal=values
+  
+  show:arguments: 
+  - https://github.com/kubernetes/dashboard/blob/master/docs/common/dashboard-arguments.md

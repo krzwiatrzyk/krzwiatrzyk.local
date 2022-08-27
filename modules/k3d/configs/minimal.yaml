@@ -19,6 +19,6 @@ options:
     - arg: --disable=local-storage
       nodeFilters:
       - server:0
-      
-
-# Add additional SAN for kubernetes.localhost
+    - arg: --tls-san=kubernetes.localhost
+      nodeFilters:
+      - server:0

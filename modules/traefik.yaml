@@ -1,0 +1,13 @@
+version: 3
+
+tasks:
+  install:
+    cmds:
+    - >
+      helm upgrade --install traefik traefik/traefik
+      -f charts/apps/values/traefik.yaml
+      -n traefik
+      --create-namespace
+    - kubectl rollout status -n traefik deployment/traefik --timoeout 1m
+    status:
+    - helm ls -n traefik | grep traefik
