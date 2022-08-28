@@ -1,0 +1,16 @@
+# https://github.com/vmware-tanzu/pinniped/blob/main/deploy/concierge/values.yaml 
+impersonation_proxy_spec:
+  #! options are "auto", "disabled" or "enabled".
+  #! If auto, the impersonation proxy will run only if the cluster signing key is not available
+  #! and the other strategy does not work.
+  #! If disabled, the impersonation proxy will never run, which could mean that the concierge
+  #! doesn't work at all.
+  #! If enabled, the impersonation proxy will always run regardless of other strategies available.
+  mode: enabled
+  external_endpoint: <ingress_address>
+  service:
+    type: ClusterIP
+
+replicas: 1
+
+# TO DO, create ingress manually

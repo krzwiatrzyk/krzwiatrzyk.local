@@ -7,12 +7,34 @@ tasks:
     status:
     - command -v kapp
 
+  install:
+    cmds:
+    - curl -Lso pinniped https://get.pinniped.dev/v0.19.0/pinniped-cli-linux-amd64 
+    - chmod +x pinniped
+    - sudo mv pinniped /usr/local/bin/pinniped
+    status:
+    - command -v pinniped
+
   deploy:concierge:
     deps:
     - install:kapp
     cmds:
     - kapp deploy --app pinniped-concierge --file https://get.pinniped.dev/v0.19.0/install-pinniped-concierge.yaml
 
+  deploy:auth:github: kubectl apply -f manifests/github-authenticator.yaml
+
   deploy:
     cmds:
     - task: deploy:concierge
+    - task: deploy:auth:github
+
+  kubeconfig:
+    deps:
+    - install
+    cmds:
+    - >
+      pinniped get kubeconfig
+      --oidc-client-id f67fc0417c70a9c22adf
+      --oidc-scopes openid,email
+      --oidc-listen-port 12345
+      > my-cluster.yaml

@@ -1,0 +1,9 @@
+apiVersion: authentication.concierge.pinniped.dev/v1alpha1
+kind: JWTAuthenticator
+metadata:
+  name: github
+spec:
+  issuer: https://github.com
+  audience: f67fc0417c70a9c22adf
+  claims:
+    username: email
