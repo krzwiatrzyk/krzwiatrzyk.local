@@ -31,3 +31,9 @@ tasks:
     - task: :traefik:deploy
     - task: :rancher:deploy
     - task: :rancher:show:bootstrap-url
+
+  openspeedtest:
+    cmds:
+    - task: :k3d:create
+    - task: :traefik:deploy
+    - task: :openspeedtest:deploy

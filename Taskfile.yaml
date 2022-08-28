@@ -5,6 +5,9 @@ vars:
     sh: basename "$PWD"
 
 includes:
+  openspeedtest:
+    taskfile: modules/apps/openspeedtest/Taskfile.yaml
+    dir: modules/apps/openspeedtest
   rancher:
     taskfile: modules/rancher/Taskfile.yaml
     dir: modules/rancher

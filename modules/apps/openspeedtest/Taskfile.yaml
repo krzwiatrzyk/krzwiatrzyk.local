@@ -1,0 +1,18 @@
+version: 3
+
+tasks:
+  helm:add-repo:
+    cmds:
+    - helm repo add speedtest https://openspeedtest.github.io/Helm-chart/
+    status:
+    - helm repo list | grep speedtest
+
+  deploy:
+    deps:
+    - helm:add-repo
+    cmds:
+    - >
+      helm upgrade --install openspeedtest speedtest/openspeedtest
+      -f values/demo.yaml
+      -n openspeedtest
+      --create-namespace
