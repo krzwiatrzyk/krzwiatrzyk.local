@@ -9,7 +9,7 @@
 
 # trap _term SIGTERM SIGINT
 
-DEBUG=true
+DEBUG=false
 
 function log() {
     if ${DEBUG}; then echo "$1"; fi
@@ -28,10 +28,10 @@ function selectTask() {
       log "Level: ${lvl}"
       modules=$(task --list-all -s | grep "^${module}" | cut -f ${lvl} -d ":" | uniq | xargs)
       log "Modules: ${modules}"
-      module=$(gum choose ${modules} end)
+      module=$(gum choose 000-end ${modules})
       log "Module: ${module}"
 
-      [ "${module}" == "end" ] && return 1
+      [ "${module}" == "000-end" ] && return 1
 
       command_tmp="${COMMAND}"
       [ -z ${COMMAND} ] && COMMAND="${module}" || COMMAND="${command_tmp}:${module}"

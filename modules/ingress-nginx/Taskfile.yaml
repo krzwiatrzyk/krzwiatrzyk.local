@@ -1,15 +1,15 @@
 version: 3 
 
 tasks:
-  install:helm:add-repo:
+  helm:add-repo:
     cmds:
     - helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
     status:
     - helm repo list | grep ingress-nginx
   
-  install:helm:
+  deploy:
     deps:
-    - install:helm:add-repo
+    - helm:add-repo
     cmds:
     - |
       helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \

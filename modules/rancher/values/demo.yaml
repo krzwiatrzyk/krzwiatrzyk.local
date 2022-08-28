@@ -1,0 +1,24 @@
+hostname: rancher.127.0.0.1.nip.io
+
+ingress:
+  enabled: true
+  extraAnnotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+
+  tls:
+    # options: rancher, letsEncrypt, secret
+    source: secret
+    secretName: tls-rancher-ingress
+
+replicas: 1
+
+resources: {}
+
+bootstrapPassword: bootstrap123
+
+
+# Where to offload the TLS/SSL encryption
+# - ingress (default)
+# - external
+# tls: ingress

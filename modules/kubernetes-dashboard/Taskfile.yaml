@@ -1,17 +1,17 @@
 version: 3
 
 tasks:
-  install:helm:add-repo:
+  helm:add-repo:
     cmds:
     - helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
     status:
     - helm repo list | grep kubernetes-dashboard
 
-  install:helm:
+  deploy:
     vars:
       CONFIG: '{{ .CONFIG | default "default" }}'
     deps:
-    - install:helm:add-repo
+    - helm:add-repo
     cmds:
     - helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard -n kubernetes-dashboard --create-namespace -f values/{{ .CONFIG }}.yaml
     status:

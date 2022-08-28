@@ -6,15 +6,28 @@ tasks:
     - task: :k3d:create
       vars:
         CONFIG: dex
-    - task: :traefik:install
-    - task: :dex:install:helm
-    - task: :dex:install:helm:dex-k8s-authenticator
+    - task: :traefik:deploy
+    - task: :dex:deploy
+    - task: :dex:deploy:dex-k8s-authenticator
   
   openunison:
     cmds:
     - task: :k3d:create
-    - task: :ingress-nginx:install:helm
-    - task: :kubernetes-dashboard:install:helm
+    - task: :ingress-nginx:deploy
+    - task: :kubernetes-dashboard:deply
     - task: :openunison:delete:kubernetes-dashboard-certs
     - task: :openunison:install
     - task: :openunison:restart:kubernetes-dashboard
+
+  pinniped:
+    cmds:
+    - task: :k3d:create
+    - task: :ingress-nginx:deploy
+    - task: :pinniped:deploy
+
+  rancher:
+    cmds:
+    - task: :k3d:create
+    - task: :traefik:deploy
+    - task: :rancher:deploy
+    - task: :rancher:show:bootstrap-url

@@ -1,0 +1,31 @@
+version: 3
+
+tasks:
+  helm:add-repo:
+    cmds:
+    - helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+    status:
+    - helm repo list | grep rancher-stable
+
+  deploy:
+    deps:
+    - helm:add-repo
+    vars:
+      EXTRA_ARGS: "{{ .CLI_ARGS }}"
+    cmds:
+    - >
+      helm upgrade 
+      --install
+      -n cattle-system --create-namespace
+      rancher rancher-stable/rancher 
+      -f values/demo.yaml
+      {{ .EXTRA_ARGS }}
+
+  helm:show-values:
+    - firefox https://artifacthub.io/packages/helm/rancher-stable/rancher?modal=values 
+
+  show:bootstrap-url:
+  - echo https://rancher.127.0.0.1.nip.io/dashboard/?setup=$(kubectl get secret --namespace cattle-system bootstrap-secret -o jsonpath='{.data.bootstrapPassword}' | base64 -d)
+  
+
+  

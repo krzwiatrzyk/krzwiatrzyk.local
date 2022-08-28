@@ -1,0 +1,18 @@
+version: 3 
+
+tasks:
+  install:kapp:
+    cmds:
+    - wget -O- https://carvel.dev/install.sh | sudo bash
+    status:
+    - command -v kapp
+
+  deploy:concierge:
+    deps:
+    - install:kapp
+    cmds:
+    - kapp deploy --app pinniped-concierge --file https://get.pinniped.dev/v0.19.0/install-pinniped-concierge.yaml
+
+  deploy:
+    cmds:
+    - task: deploy:concierge

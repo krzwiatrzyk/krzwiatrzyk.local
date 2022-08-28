@@ -7,7 +7,7 @@ tasks:
     status:
     - helm repo list | grep dex
 
-  install:helm:
+  deploy:
     deps:
     - create:namespace
     - helm:add-repo
@@ -21,7 +21,7 @@ tasks:
       -f ../../charts/apps/values/dex.yaml
     - kubectl rollout status -n dex deployment/dex --timeout 1m
   
-  install:helm:dex-k8s-authenticator:
+  deploy:dex-k8s-authenticator:
     cmds:
     - helm repo add sagikazarmark https://charts.sagikazarmark.dev || true
     - helm upgrade --install dex-k8s-authenticator sagikazarmark/dex-k8s-authenticator -n dex -f ../../charts/apps/values/dex-k8s-authenticator.yaml

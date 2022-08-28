@@ -5,11 +5,17 @@ vars:
     sh: basename "$PWD"
 
 includes:
+  rancher:
+    taskfile: modules/rancher/Taskfile.yaml
+    dir: modules/rancher
   k3d:
     taskfile: modules/k3d/Taskfile.yaml
     dir: modules/k3d
     vars:
       CLUSTER_NAME: '{{ .CLUSTER_NAME }}'
+  pinniped:
+    taskfile: modules/pinniped/Taskfile.yaml
+    dir: modules/pinniped
   dex:
     taskfile: modules/dex/Taskfile.yaml
     dir: modules/dex
@@ -28,6 +34,8 @@ includes:
 
 tasks:
   default: scripts/selectTask.sh
+  001-clean: 
+  - task: k3d:delete
 
 
 
