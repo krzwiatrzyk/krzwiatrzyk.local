@@ -1,0 +1,11 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      commitTitle: Updated versions in docs for v0.19.0 release
+      sha: 4441ac0600b0f949cfc0dc8f176ac308d9431ca2
+      tags:
+      - v0.19.0-1-g4441ac06
+    path: deploy/concierge
+  path: concierge
+kind: LockConfig

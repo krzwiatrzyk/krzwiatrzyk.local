@@ -21,6 +21,19 @@ tasks:
     cmds:
     - kapp deploy --app pinniped-concierge --file https://get.pinniped.dev/v0.19.0/install-pinniped-concierge.yaml
 
+  vendir:sync:concierge:
+    deps:
+    - install:vendir
+    dir: manifests
+    cmds:
+    - vendir sync
+
+  install:vendir:
+    cmds:
+    - wget -O- https://carvel.dev/install.sh | sudo bash
+    status:
+    - command -v vendir
+
   deploy:auth:github: kubectl apply -f manifests/github-authenticator.yaml
 
   deploy:

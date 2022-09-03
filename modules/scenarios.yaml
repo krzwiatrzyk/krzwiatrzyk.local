@@ -14,7 +14,7 @@ tasks:
     cmds:
     - task: :k3d:create
     - task: :ingress-nginx:deploy
-    - task: :kubernetes-dashboard:deply
+    - task: :kubernetes-dashboard:deploy
     - task: :openunison:delete:kubernetes-dashboard-certs
     - task: :openunison:install
     - task: :openunison:restart:kubernetes-dashboard

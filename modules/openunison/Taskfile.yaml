@@ -13,8 +13,8 @@ tasks:
   create:role:
   - kubectl create clusterrolebinding krzwiatrzyk-cluster-admin --user krzwiatrzyk --clusterrole cluster-admin
 
-  delete:kubernetes-dashboard-cert:
-  - kubectl delete -n kubernetes-dashboard secret kubernetes-dashboard-certs
+  delete:kubernetes-dashboard-certs:
+    - kubectl delete -n kubernetes-dashboard secret kubernetes-dashboard-certs
 
   restart:kubernetes-dashboard:
   - kubectl delete pods -n kubernetes-dashboard --selector app.kubernetes.io/name=kubernetes-dashboard
