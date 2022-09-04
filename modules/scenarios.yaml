@@ -37,3 +37,9 @@ tasks:
     - task: :k3d:create
     - task: :traefik:deploy
     - task: :openspeedtest:deploy
+
+  threatmapper:
+    cmds:
+    - task: :k3d:create
+    - task: :traefik:deploy
+    - task: :threatmapper:deploy:console

@@ -9,7 +9,7 @@
 
 # trap _term SIGTERM SIGINT
 
-DEBUG=false
+DEBUG=true
 
 function log() {
     if ${DEBUG}; then echo "$1"; fi

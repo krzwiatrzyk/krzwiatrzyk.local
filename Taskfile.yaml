@@ -5,6 +5,9 @@ vars:
     sh: basename "$PWD"
 
 includes:
+  threatmapper:
+    taskfile: modules/apps/threatmapper/Taskfile.yaml
+    dir: modules/apps/threatmapper
   openspeedtest:
     taskfile: modules/apps/openspeedtest/Taskfile.yaml
     dir: modules/apps/openspeedtest
@@ -39,6 +42,9 @@ tasks:
   default: scripts/selectTask.sh
   001-clean: 
   - task: k3d:delete
+
+  update:
+  - sudo sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
 
 
 

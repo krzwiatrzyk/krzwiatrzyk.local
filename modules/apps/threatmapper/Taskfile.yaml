@@ -1,0 +1,64 @@
+version: 3
+
+tasks:
+  helm:add-repo:
+    cmds:
+    - helm repo add deepfence https://deepfence-helm-charts.s3.amazonaws.com/threatmapper
+    status:
+    - helm repo list | grep deepfence
+
+  deploy:
+    deps:
+    - helm:add-repo
+    cmds:
+    - task: deploy:console
+    - task: deploy:router
+    - task: patch:affinity
+    - task: patch:replicas
+
+  deploy:console:
+    deps:
+    - helm:add-repo
+    cmds:
+    - >
+      helm upgrade --install deepfence-console deepfence/deepfence-console -n threatmapper 
+      --create-namespace -f values/console.yaml
+      --post-renderer patches/kustomize.sh
+
+  deploy:router:
+    cmds:
+    - helm upgrade --install deepfence-router deepfence/deepfence-router -f router-values.yaml
+
+  deploy:agent:
+    cmds:
+    - helm upgrade --install -f agent-values.yaml -n threatmapper deepfence-agent deepfence/deepfence-agent
+
+  patch:affinity:
+  - kubectl patch deployment -n threatmapper deepfence-backend --patch-file patches/affinity.yaml
+  - kubectl patch deployment -n threatmapper deepfence-api --patch-file patches/affinity.yaml
+  - kubectl patch deployment -n threatmapper deepfence-celery --patch-file patches/affinity.yaml
+  - kubectl patch deployment -n threatmapper deepfence-diagnosis --patch-file patches/affinity.yaml
+
+  patch:replicas:
+  - kubectl scale deployment -n deepfence deepfence-router --replicas 1
+
+  uninstall:
+    cmds:
+    - helm uninstall -n 
+
+  values:console:
+    - helm show values deepfence/deepfence-console
+
+  values:helm:router:
+    - helm show values deepfence/deepfence-router
+  
+  values:helm:agent:
+    - helm show values deepfence/deepfence-agent
+
+# Optionally, install the Deepfence Router service and wait for the platform to deploy a load balancer
+
+  template:console:
+    cmds:
+    - >
+      helm template deepfence-console deepfence/deepfence-console -n threatmapper -f values/console.yaml 
+      --post-renderer patches/kustomize.sh
