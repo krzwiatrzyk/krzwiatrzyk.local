@@ -5,7 +5,7 @@ tasks:
     cmds:
     - >
       helm upgrade --install traefik traefik/traefik
-      -f charts/apps/values/traefik.yaml
+      -f values/custom.yaml
       -n traefik
       --create-namespace
     - kubectl rollout status -n traefik deployment/traefik --timeout 1m

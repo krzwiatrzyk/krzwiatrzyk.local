@@ -1,0 +1,6 @@
+version: 3
+
+includes:
+  local-path-provisioner:
+    taskfile: local-path-provisioner/Taskfile.yaml
+    

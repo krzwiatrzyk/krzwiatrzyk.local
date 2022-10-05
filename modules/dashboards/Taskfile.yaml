@@ -1,0 +1,11 @@
+version: 3
+
+includes:
+  kubernetes-dashboard:
+    taskfile: kubernetes-dashboard/Taskfile.yaml
+    dir: kubernetes-dashboard
+  rancher:
+    taskfile: rancher/Taskfile.yaml
+    dir: rancher
+
+  

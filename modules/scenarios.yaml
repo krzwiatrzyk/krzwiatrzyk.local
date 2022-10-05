@@ -1,56 +1,53 @@
 version: 3
 
-includes:
-  hedgedoc:
-    taskfile: apps/hedgedoc/Taskfile.yaml
-    dir: apps/hedgedoc
-
 tasks:
   dex:
     cmds:
-    - task: :k3d:create
+    - task: :provisioning:k3d:create
       vars:
         CONFIG: dex
-    - task: :traefik:deploy
-    - task: :dex:deploy
-    - task: :dex:deploy:dex-k8s-authenticator
+    - task: :networking:traefik:deploy
+    - task: :auth:dex:deploy
+    - task: :auth:dex:deploy:dex-k8s-authenticator
   
   openunison:
     cmds:
-    - task: :k3d:create
-    - task: :ingress-nginx:deploy
-    - task: :kubernetes-dashboard:deploy
-    - task: :openunison:delete:kubernetes-dashboard-certs
-    - task: :openunison:install
-    - task: :openunison:restart:kubernetes-dashboard
+    - task: :provisioning:k3d:create
+    - task: :networking:ingress-nginx:deploy
+    - task: :dashboards:kubernetes-dashboard:deploy
+    - task: :auth:openunison:delete:kubernetes-dashboard-certs
+    - task: :auth:openunison:install
+    - task: :auth:openunison:restart:kubernetes-dashboard
 
   pinniped:
     cmds:
-    - task: :k3d:create
-    - task: :ingress-nginx:deploy
-    - task: :pinniped:deploy
+    - task: :provisioning:k3d:create
+    - task: :networking:ingress-nginx:deploy
+    - task: :auth:pinniped:deploy
 
   rancher:
     cmds:
-    - task: :k3d:create
-    - task: :traefik:deploy
-    - task: :rancher:deploy
-    - task: :rancher:show:bootstrap-url
+    - task: :provisioning:k3d:create
+    - task: :networking:traefik:deploy
+    - task: :dashboards:rancher:deploy
+    - task: :dashboards:rancher:show:bootstrap-url
 
   openspeedtest:
     cmds:
-    - task: :k3d:create
-    - task: :traefik:deploy
-    - task: :openspeedtest:deploy
+    - task: :provisioning:k3d:create
+    - task: :networking:traefik:deploy
+    - task: :apps:openspeedtest:deploy
 
   threatmapper:
     cmds:
-    - task: :k3d:create
-    - task: :traefik:deploy
-    - task: :threatmapper:deploy:console
-    
+    - task: :provisioning:k3d:create
+    - task: :networking:traefik:deploy
+    - task: :security:threatmapper:deploy:console
+
   hedgedoc:
     cmds:
-    - task: :k3d:create
-    - task: :traefik:deploy
-    - task: hedgedoc:deploy
+    - task: :provisioning:k3d:create
+    - task: :networking:traefik:deploy
+    - task: :storage:local-path-provisioner:deploy
+    - task: :storage:local-path-provisioner:set-as-default-storage-class
+    - task: :apps:hedgedoc:deploy

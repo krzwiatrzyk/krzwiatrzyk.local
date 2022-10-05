@@ -1,0 +1,7 @@
+version: 3
+
+includes:
+  argocd:
+    taskfile: argocd/Taskfile.yaml
+    dir: argocd
+  

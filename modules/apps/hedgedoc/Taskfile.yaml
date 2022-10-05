@@ -13,6 +13,6 @@ tasks:
     cmds:
     - >
       helm upgrade --install hedgedoc truecharts/hedgedoc
-      -f values/demo.yaml
+      -f values/custom.yaml
       -n hedgedoc
       --create-namespace

@@ -1,0 +1,20 @@
+host: hedgedoc.127.0.0.1.nip.io
+
+ingress:
+  main:
+    enabled: true
+    hosts:
+    - host: "{{ .Values.host }}"
+      paths:
+      - path: /
+        pathType: Prefix
+    fixedMiddlewares: []
+
+persistence:
+  uploads:
+    size: 1Gi
+
+env:
+  CMD_DOMAIN: "{{ .Values.host }}"
+  CMD_URL_ADDPORT: false
+  CMD_PROTOCOL_USESSL: true

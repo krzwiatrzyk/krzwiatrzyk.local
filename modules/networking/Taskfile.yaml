@@ -1,0 +1,9 @@
+version: 3 
+
+includes:
+  traefik:
+    taskfile: traefik/Taskfile.yaml
+    dir: traefik
+  ingress-nginx:
+    taskfile: ingress-nginx/Taskfile.yaml
+    dir: ingress-nginx

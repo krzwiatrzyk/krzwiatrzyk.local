@@ -1,0 +1,12 @@
+version: 3
+
+includes:
+  dex:
+    taskfile: dex/Taskfile.yaml
+    dir: dex
+  openunison:
+    taskfile: openunison/Taskfile.yaml
+    dir: openunison
+  pinniped:
+    taskfile: pinniped/Taskfile.yaml
+    dir: pinniped

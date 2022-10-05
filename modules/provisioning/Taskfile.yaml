@@ -1,0 +1,9 @@
+version: 3
+
+includes:
+  k3d:
+    taskfile: k3d/Taskfile.yaml
+    dir: k3d
+  tkg:
+    taskfile: tkg/Taskfile.yaml
+    dir: tkg

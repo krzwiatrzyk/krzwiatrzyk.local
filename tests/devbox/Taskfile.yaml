@@ -1,0 +1,8 @@
+version: 3
+
+tasks:
+  install: 
+    cmds:
+    - curl -fsSL https://get.jetpack.io/devbox | bash
+    status:
+    - command -v devbox

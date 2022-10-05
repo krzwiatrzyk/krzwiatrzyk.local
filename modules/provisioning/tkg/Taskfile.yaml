@@ -1,0 +1,25 @@
+version: 3
+
+tasks:
+  install:homebrew:
+    cmds:
+    - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    status:
+    - command -v brew
+
+  install:
+    deps:
+    - install:homebrew
+    cmds:
+    - brew install vmware-tanzu/tanzu/tanzu-community-edition
+    - /home/linuxbrew/.linuxbrew/Cellar/tanzu-community-edition/v0.12.1/libexec/configure-tce.sh
+    status:
+    - command -v tanzu
+  
+  start:
+    cmds:
+    - tanzu management-cluster create --ui 
+
+#    echo '# Set PATH, MANPATH, etc., for Homebrew.' >> /home/krzwiatrzyk/.zprofile
+#    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/krzwiatrzyk/.zprofile
+#    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"

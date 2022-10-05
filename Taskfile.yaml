@@ -5,43 +5,20 @@ vars:
     sh: basename "$PWD"
 
 includes:
-  threatmapper:
-    taskfile: modules/apps/threatmapper/Taskfile.yaml
-    dir: modules/apps/threatmapper
-  openspeedtest:
-    taskfile: modules/apps/openspeedtest/Taskfile.yaml
-    dir: modules/apps/openspeedtest
-  rancher:
-    taskfile: modules/rancher/Taskfile.yaml
-    dir: modules/rancher
-  k3d:
-    taskfile: modules/k3d/Taskfile.yaml
-    dir: modules/k3d
-    vars:
-      CLUSTER_NAME: '{{ .CLUSTER_NAME }}'
-  pinniped:
-    taskfile: modules/pinniped/Taskfile.yaml
-    dir: modules/pinniped
-  dex:
-    taskfile: modules/dex/Taskfile.yaml
-    dir: modules/dex
-  ingress-nginx: 
-    taskfile: modules/ingress-nginx/Taskfile.yaml
-    dir: modules/ingress-nginx
-  kubernetes-dashboard:
-    taskfile: modules/kubernetes-dashboard/Taskfile.yaml
-    dir: modules/kubernetes-dashboard
-  openunison:
-    taskfile: modules/openunison/Taskfile.yaml
-    dir: modules/openunison
-  argocd: modules/argocd.yaml
-  traefik: modules/traefik.yaml
+  storage: modules/storage/Taskfile.yaml
+  networking: modules/networking/Taskfile.yaml
+  apps: modules/apps/Taskfile.yaml
+  auth: modules/auth/Taskfile.yaml
+  dashboards: modules/dashboards/Taskfile.yaml
+  gitops: modules/gitops/Taskfile.yaml
+  provisioning: modules/provisioning/Taskfile.yaml
+  security: modules/security/Taskfile.yaml
   001-scenarios: modules/scenarios.yaml
 
 tasks:
   default: scripts/selectTask.sh
   001-clean: 
-  - task: k3d:delete
+  - task: provisioning:k3d:delete
 
   update:
   - sudo sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin

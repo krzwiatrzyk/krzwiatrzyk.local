@@ -1,0 +1,12 @@
+version: 3
+
+includes:
+  hedgedoc:
+    taskfile: hedgedoc/Taskfile.yaml
+    dir: hedgedoc
+  openspeedtest:
+    taskfile: openspeedtest/Taskfile.yaml
+    dir: openspeedtest
+  snoopforms:
+    taskfile: snoopforms/Taskfile.yaml
+    dir: snoopforms

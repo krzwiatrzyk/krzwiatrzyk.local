@@ -1,0 +1,6 @@
+version: 3 
+
+includes:
+  threatmapper:
+    taskfile: threatmapper/Taskfile.yaml
+    dir: threatmapper
