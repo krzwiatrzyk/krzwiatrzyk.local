@@ -1,0 +1,18 @@
+version: 3
+
+tasks:
+  helm:add-repo:
+    cmds:
+    - helm repo add truecharts https://charts.truecharts.org/
+    status:
+    - helm repo list | grep truecharts
+
+  deploy:
+    deps:
+    - helm:add-repo
+    cmds:
+    - >
+      helm upgrade --install hedgedoc truecharts/hedgedoc
+      -f values/demo.yaml
+      -n hedgedoc
+      --create-namespace
