@@ -1,0 +1,6 @@
+version: 3
+
+includes:
+  kyma:
+    taskfile: kyma/Taskfile.yaml
+    dir: kyma

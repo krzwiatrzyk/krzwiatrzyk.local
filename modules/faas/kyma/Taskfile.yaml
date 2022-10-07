@@ -1,0 +1,31 @@
+version: 3
+
+tasks:
+  install:cli:
+    cmds:
+    - brew install kyma-cli
+    status:
+    - command -v kyma
+
+  install:cli:alternative:
+    cmds:
+    - |
+      curl -Lo kyma.tar.gz "https://github.com/kyma-project/cli/releases/download/$(curl -s https://api.github.com/repos/kyma-project/cli/releases/latest | grep tag_name | cut -d '"' -f 4)/kyma_Linux_x86_64.tar.gz" \
+      && mkdir kyma-release && tar -C kyma-release -zxvf kyma.tar.gz && chmod +x kyma-release/kyma && sudo mv kyma-release/kyma /usr/local/bin \
+      && rm -rf kyma-release kyma.tar.gz
+  
+  provision:k3d:
+    cmds:
+    - kyma provision k3d -p 8080:80@loadbalancer -p 8443:443@loadbalancer
+    status:
+    - k3d cluster list | grep kyma
+
+  deploy:
+    deps:
+    - provision:k3d
+    cmds:
+    - kyma deploy
+
+  dashboard:
+    cmds:
+    - kyma dashboard

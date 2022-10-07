@@ -1,0 +1,11 @@
+version: "3"
+services:
+  actual_server:
+    container_name: actual_server
+    image: kippenhof/actual-server
+    ports: 
+      - "5006:5006"
+    volumes: []
+      # - ./server-files:/app/server-files
+      # - ./user-files:/app/user-files
+    restart: unless-stopped
