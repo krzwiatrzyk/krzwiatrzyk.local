@@ -4,4 +4,7 @@ includes:
   argocd:
     taskfile: argocd/Taskfile.yaml
     dir: argocd
+  kubevela:
+    taskfile: kubevela/Taskfile.yaml
+    dir: kubevela
   

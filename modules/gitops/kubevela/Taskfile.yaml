@@ -1,0 +1,55 @@
+version: 3
+
+vars:
+  VERSION: 1.5.5
+
+tasks:
+  install:
+    cmds:
+    - curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s {{ .VERSION }}
+    - curl -fsSl https://kubevela.net/script/install.sh | bash -s {{ .VERSION }}
+    status:
+    - command -v velad
+    - command -v vela
+
+  deploy:
+  - vela install --version v{{ .VERSION }}
+  - task: deploy:ui
+
+  deploy:ui:
+  - vela addon enable velaux --version=v{{ .VERSION }}
+
+  deploy:local:
+  - sudo velad install
+  - sudo cp $(sudo velad kubeconfig --host) ~/.kube/velad
+  - sudo chown ${USER}:${USER} ~/.kube/velad
+  - kubectl config-registry import ~/.kube/velad velad
+  - kubectl config-registry use velad
+  - vela comp
+
+  # VelaUX needs authentication. The default username is admin and the password is VelaUX12345.
+  port-forward:ui:
+  - vela port-forward addon-velaux -n vela-system 8080:80
+
+  cleanup:local:
+  - velad uninstall
+  
+
+  install:ingress-route:
+  - kubectl apply -f manifests/ingress-route.yaml
+
+  demo:
+    cmds:
+    - task: demo:create:env
+    - task: demo:application:deploy
+    - task: demo:application:status
+    - task: demo:application:port-forward
+    - gum confirm "Continue?"
+    - task: demo:application:promote
+    - task: demo:application:status
+  
+  demo:create:env: vela env init prod --namespace prod
+  demo:application:deploy: vela up -f manifests/applications/demo.yaml
+  demo:application:status: vela status demo-app
+  demo:application:port-forward: vela port-forward demo-app 8000:8000
+  demo:application:promote: vela workflow resume demo-app

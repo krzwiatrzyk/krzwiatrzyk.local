@@ -1,0 +1,12 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: echo-server
+spec:
+  components:
+  - name: "echo-server"
+    type: helm
+    properties:
+      chart: "echo-server"
+      version: "x.x.x"
+      url: TODO
