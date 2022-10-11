@@ -10,3 +10,6 @@ includes:
   snoopforms:
     taskfile: snoopforms/Taskfile.yaml
     dir: snoopforms
+  nocodb:
+    taskfile: nocodb/Taskfile.yaml
+    dir: nocodb

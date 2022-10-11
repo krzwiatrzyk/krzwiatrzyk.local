@@ -1,0 +1,13 @@
+version: 3
+
+tasks:
+  compose:demo:
+  - task: compose:up
+  - defer:
+      task: compose:down
+
+  compose:up:
+  - docker-compose up
+
+  compose:down:
+  - docker-compose down
