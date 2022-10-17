@@ -1,6 +1,7 @@
 version: 3
 
 tasks:
+  # Helm add repo
   helm:add-repo:
     cmds:
     - helm repo add argo https://argoproj.github.io/argo-helm
