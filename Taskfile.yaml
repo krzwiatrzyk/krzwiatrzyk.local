@@ -26,7 +26,7 @@ tasks:
   commit:
   - git add .
   - git commit -m "fast"
-  - git push origin min
+  - git push origin main
 
 
 
