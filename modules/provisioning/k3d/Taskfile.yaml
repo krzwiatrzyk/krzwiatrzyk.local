@@ -22,3 +22,5 @@ tasks:
   delete:
     cmds:
     - k3d cluster delete {{ .CLUSTER_NAME }}
+    status:
+    - k3d cluster list | ! grep {{ .CLUSTER_NAME }}

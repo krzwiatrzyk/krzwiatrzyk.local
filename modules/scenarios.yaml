@@ -41,7 +41,9 @@ tasks:
   threatmapper:
     cmds:
     - task: :provisioning:k3d:create
-    - task: :networking:traefik:deploy
+      vars:
+        CONFIG: threatmapper
+    #- task: :networking:traefik:deploy
     - task: :security:threatmapper:deploy:console
 
   hedgedoc:
@@ -51,3 +53,17 @@ tasks:
     - task: :storage:local-path-provisioner:deploy
     - task: :storage:local-path-provisioner:set-as-default-storage-class
     - task: :apps:hedgedoc:deploy
+
+  telepresence:
+    cmds:
+    - task: :provisioning:k3d:create
+    - task: :networking:traefik:deploy
+
+  zalando:
+    cmds:
+    - task: :provisioning:k3d:create
+      vars:
+        CLUSTER_NAME: zalando
+    - task: :storage:local-path-provisioner:deploy
+    - task: :storage:local-path-provisioner:set-as-default-storage-class
+    - task: :operators:zalando:deploy:helmfile

@@ -1,0 +1,38 @@
+database: 
+  type: postgresql
+  wal: false
+  url: "postgresql://vaultwarden:password@postgresql:5432"
+
+vaultwarden:
+  admin:
+    enabled: true
+    token: password
+
+persistence:
+  enabled: true
+  size: 5Gi
+  accessMode: ReadWriteOnce
+
+image:
+  pullPolicy: IfNotPresent
+  tag: "1.25.2"
+
+serviceAccount:
+  create: true
+
+ingress:
+  tls:
+    - secretName: compass.toss.comarch
+  enabled: true
+  host: "compass.toss.comarch"
+#   annotations:
+#     route.openshift.io/termination: "edge"
+#     route.openshift.io/insecureEdgeTerminationPolicy: "Redirect"
+
+resources:
+  limits:
+    cpu: 2
+    memory: 2Gi
+  requests:
+    cpu: 1
+    memory: 1Gi

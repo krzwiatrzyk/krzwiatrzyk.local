@@ -1,0 +1,64 @@
+# parameters describing Postgres users
+configUsers:
+  # postgres username used for replication between instances
+  replication_username: standby
+  # postgres superuser name to be created by initdb
+  super_username: postgres
+
+configKubernetes:
+  # additional labels assigned to the cluster objects
+  cluster_labels:
+    application: spilo
+  # label assigned to Kubernetes objects created by the operator
+  cluster_name_label: test-zalando
+
+  # storage resize strategy, available options are: ebs, pvc, off
+  storage_resize_mode: pvc
+
+  # operator watches for postgres objects in the given namespace
+  watched_namespace: "*"  # listen to all namespaces
+
+# configure resource requests for the Postgres pods
+configPostgresPodResources:
+  # CPU limits for the postgres containers
+  default_cpu_limit: "1"
+  # CPU request value for the postgres containers
+  default_cpu_request: 100m
+  # memory limits for the postgres containers
+  default_memory_limit: 500Mi
+  # memory request value for the postgres containers
+  default_memory_request: 100Mi
+  # hard CPU minimum required to properly run a Postgres cluster
+  min_cpu_limit: 250m
+  # hard memory minimum required to properly run a Postgres cluster
+  min_memory_limit: 250Mi
+
+# configure K8s cron job managed by the operator
+configLogicalBackup:
+  # prefix for the backup job name
+  logical_backup_job_prefix: "logical-backup-"
+  # storage provider - either "s3" or "gcs"
+  logical_backup_provider: "s3"
+  # S3 Access Key ID
+  logical_backup_s3_access_key_id: ""
+  # S3 bucket to store backup results
+  logical_backup_s3_bucket: "my-bucket-url"
+  # S3 region of bucket
+  logical_backup_s3_region: ""
+  # S3 endpoint url when not using AWS
+  logical_backup_s3_endpoint: ""
+  # S3 Secret Access Key
+  logical_backup_s3_secret_access_key: ""
+  # S3 server side encryption
+  logical_backup_s3_sse: "AES256"
+  # backup schedule in the cron format
+  logical_backup_schedule: "30 00 * * *"
+
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 500Mi
+  requests:
+    cpu: 100m
+    memory: 250Mi

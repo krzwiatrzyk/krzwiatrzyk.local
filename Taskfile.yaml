@@ -13,7 +13,9 @@ includes:
   gitops: modules/gitops/Taskfile.yaml
   provisioning: modules/provisioning/Taskfile.yaml
   security: modules/security/Taskfile.yaml
-  001-scenarios: modules/scenarios.yaml
+  dev: modules/dev/Taskfile.yaml
+  operators: modules/operators/Taskfile.yaml
+  scenarios: modules/scenarios.yaml
 
 tasks:
   default: scripts/selectTask.sh

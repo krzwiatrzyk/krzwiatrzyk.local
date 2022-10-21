@@ -1,0 +1,27 @@
+helmDefaults:
+  # kubeContext: k3d-zalando
+  cleanupOnFail: true 
+  verify: true
+  wait: true
+  waitForJobs: true
+  createNamespace: true
+
+repositories:
+ - name: commonground
+   url: https://charts.commonground.nl/
+
+releases:
+- name: postgres-operator
+  version: 1.7.1
+  namespace: postgres-operator
+  chart: commonground/postgres-operator
+  values:
+  - values/postgres-operator.yaml
+  verify: false
+- name: postgres-operator-ui
+  version: 1.7.1
+  namespace: postgres-operator
+  chart: commonground/postgres-operator-ui
+  values:
+  - values/postgres-operator-ui.yaml
+  verify: false

@@ -1,7 +1,13 @@
 version: 3
 
 tasks:
-  deploy: kustomize build "github.com/rancher/local-path-provisioner/deploy?ref=v0.0.22" | kubectl apply -f -
+  deploy: 
+    cmds:
+    - kustomize build "github.com/rancher/local-path-provisioner/deploy?ref=v0.0.22" | kubectl apply -f -
+    status:
+    - kubectl rollout status -n local-path-storage deployment/local-path-provisioner --timeout 1m
   set-as-default-storage-class:
     cmds:
     - kubectl annotate --overwrite storageclass local-path storageclass.kubernetes.io/is-default-class=true
+    status:
+    - kubectl get storageclass local-path | grep default

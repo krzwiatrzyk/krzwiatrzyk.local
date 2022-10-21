@@ -1,5 +1,7 @@
+# Default admin: 
+
 volume:
-  storageClass: openebs-hostpath
+  storageClass: local-path
   # Change stoage class when using different PV provisioner.
   # For example, it will be 'openebs-hostpath' when using openebs
   # or it will be 'default' when using cloud managed Persistent Volumes.
@@ -8,17 +10,23 @@ volume:
 
 elasticsearchReplicationFactor: 1
 
+elasticsearch:
+  replicaCount: 1
+
 namespace: threatmapper
+
+# managementConsolePort: "443"
+# deepfenceUrl: ""
 
 # Mount container runtime socket path to agent pod. Agent will detect which runtime it is using these files.
 mountContainerRuntimeSocket:
-  dockerSock: "false"
+  dockerSock: false
   dockerSockPath: "/var/run/docker.sock"
-  containerdSock: "true"
+  containerdSock: true
   containerdSockPath: "/run/k3s/containerd/containerd.sock"
 
 image:
-  tag: 1.4.0
+  tag: 1.4.1
 
 clusterName: "threatmapper"
 

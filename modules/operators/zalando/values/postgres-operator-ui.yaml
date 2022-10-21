@@ -1,0 +1,34 @@
+# configure UI pod resources
+resources:
+  limits:
+    cpu: 200m
+    memory: 200Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi
+
+# configure UI ENVs
+envs:
+  # IMPORTANT: While operator chart and UI chart are idendependent, this is the interface between
+  # UI and operator API. Insert the service name of the operator API here!
+  operatorApiUrl: "http://postgres-operator:8080"
+  operatorClusterNameLabel: "test-zalando"
+  resourcesVisible: "False"
+  targetNamespace: "postgres-operator"
+  teams:
+    - "acid"
+
+# configure UI ingress. If needed: "enabled: true"
+ingress:
+  enabled: false
+  annotations:
+    {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: ui.example.org
+      paths: [""]
+  tls: []
+  #  - secretName: ui-tls
+  #    hosts:
+  #      - ui.exmaple.org

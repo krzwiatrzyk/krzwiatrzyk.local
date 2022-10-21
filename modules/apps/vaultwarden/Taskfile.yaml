@@ -1,0 +1,19 @@
+version: 3
+
+tasks:
+  helm:add-repos:
+    cmds:
+    - helm repo add gissilabs https://gissilabs.github.io/charts/
+    status:
+    - helm repo list | grep gissilabs
+
+  install:
+    deps:
+    - helm:add-repos
+    cmds:
+    - helm upgrade --install vaultwarden gissilabs/vaultwarden -f values/vaultwardens.yaml
+
+  recovery:
+  - psql -h 127.0.0.1 -U postgres -p 5433 -c "CREATE DATABASE vaultwarden;"
+  - psql -h 127.0.0.1 -U postgres -p 5433 -c "CREATE ROLE vaultwarden; ALTER ROLE vaultwarden WITH PASSWORD 'password'; ALTER ROLE vaultwarden WITH LOGIN; "
+  - psql -h 127.0.0.1 -U postgres -p 5433 -d vaultwarden < vaultwardens-03-09-22.sql
