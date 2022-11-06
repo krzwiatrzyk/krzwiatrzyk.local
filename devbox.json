@@ -1,0 +1,9 @@
+{
+  "packages": [
+    "kube3d",
+    "kustomize"
+  ],
+  "shell": {
+    "init_hook": null
+  }
+}

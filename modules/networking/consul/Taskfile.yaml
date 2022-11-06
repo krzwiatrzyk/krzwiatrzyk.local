@@ -1,0 +1,32 @@
+version: 3
+
+tasks:
+  helm:add-repo:
+    cmds:
+    - helm repo add hashicorp https://helm.releases.hashicorp.com
+    status:
+    - helm repo list | grep hashicorp
+
+  deploy: 
+    deps:
+    - helm:add-repo
+    cmds:
+    - >
+      helm upgrade --install consul hashicorp/consul --version 1.0.0-beta5 
+      --create-namespace
+      -n consul
+      -f values/custom.yaml
+
+  deploy:hostname1:
+    cmds:
+    - kubectl apply -k hostname
+    # - cmds: helm repo add helm3-brodul-org https://helm3.brodul.org 
+    #   ignore_error: true
+    # - > 
+    #   helm upgrade hostname1 helm3-brodul-org/response-hostname
+    #   --install 
+    #   --create-namespace -n hostname1
+    #   --version 0.1.6 --set replicaCount=2
+    # - kubectl -n hostname1 annotate svc hostname1-response-hostname consul.hashicorp.com/service-ignore=true
+    # status:
+    # - helm ls -n hostname1 | grep hostname1
