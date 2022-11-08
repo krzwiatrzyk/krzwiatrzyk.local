@@ -1,0 +1,33 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: quay.io/enterprisedb/postgresql
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  minio:
+    image: quay.io/minio/minio:RELEASE.2022-11-08T05-27-07Z
+    command: server --console-address ":9001" /data
+    ports:
+      - 9000:9000
+      - 0.0.0.0:9001:9001
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3

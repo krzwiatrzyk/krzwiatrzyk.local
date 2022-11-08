@@ -16,6 +16,7 @@ includes:
   dev: modules/dev/Taskfile.yaml
   operators: modules/operators/Taskfile.yaml
   scenarios: modules/scenarios.yaml
+  databases: modules/databases/Taskfile.yaml
 
 tasks:
   default: scripts/selectTask.sh
